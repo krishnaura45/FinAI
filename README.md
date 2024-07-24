@@ -1,2 +1,1 @@
-# Stock-sage
-AI Driven Equity Research Tool 
+# StockSage: AI Driven Equity Research Tool 
