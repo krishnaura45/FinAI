@@ -1,6 +1,6 @@
 <h1 align=center> StockSage: AI Driven Equity Research Tool</h1> 
 
-![image](https://github.com/user-attachments/assets/e4ec6af7-0ecf-49db-bef0-6c906666a755)
+![Screenshot 2024-10-01 234731](https://github.com/user-attachments/assets/2b4bdeed-c41c-4dbb-83b8-cbf1711a142d)
 
 ## Introduction
 Stock Sage is an AI-driven equity research tool designed to automate the research process for equity analysts. By aggregating and analyzing financial news from multiple sources, it allows users to ask specific questions and retrieve concise answers or summaries from news articles. The tool leverages cutting-edge technologies like LangChain, OpenAI API, and Streamlit to streamline the workflow for financial analysts, helping them make data-driven decisions more efficiently.
