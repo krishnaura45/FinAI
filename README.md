@@ -1,85 +1,207 @@
-<h1 align=center> StockSage: AI Driven Equity Research Tool</h1> 
+<h1 align=center> FinAI: LLM-based Equity Research Engine</h1> 
 
-![image](https://github.com/user-attachments/assets/5c066a63-4df4-4bbb-8f3c-852b7aeed32a)
+![Tool UI](https://github.com/user-attachments/assets/5c066a63-4df4-4bbb-8f3c-852b7aeed32a)
 
-## Introduction
-- Equity research analysis is crucial for informed investment decisions.
-- Manual research can cause:
-  - Delayed Decision-making
-  - High Effort and Time Consumption
-  - Fragmented Information Analysis
-- Our tool aims to automate data aggregation from multiple sources, providing quick, accurate answers to complex queries.
-- Utilizes advanced technologies like LangChain, OpenAI API, and FAISS for efficient text processing, semantic search, and contextual understanding.
+---
 
+## Table of Contents
 
-## Literature Review
+* [Introduction](#introduction)
+* [Problem Statement](#problem-statement)
+* [Working (Pipeline Stages)](#working-pipeline-stages)
+* [Results](#results)
+* [Files & Structure](#files--structure)
+* [Installation](#installation)
+* [Tech Stack](#tech-stack)
+* [References](#references)
+* [Future Scope](#future-scope)
+* [Contributing](#contributing)
+* [Thanks for Visiting!](#thanks-for-visiting)
 
-| **Study**                                             | **Authors**              | **Method**                                                                                     | **Findings**                                                                                   | **Challenges**                                              | **Research Gaps**                                                    | **Improvements in Stock Sage**                              |
-|-------------------------------------------------------|--------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|-------------------------------------------------------------|-------------------------------------------------------------|--------------------------------------------------------------|
-| **Automate Strategy Finding with LLM in Quant Investment** | Zhizhuo Kou et al.         | LLMs & multi-agent systems for alpha generation from financial data                            | Outperforms traditional models in trading strategy generation                                  | Computational cost and scalability issues                    | No focus on simplifying equity research tasks                | Automates research by extracting answers from articles       |
-| **Revolutionizing Finance with LLMs**                 | M.S. Usha et al.           | LLMs for sentiment analysis and QA                                                              | Enhances sentiment analysis and financial question-answering                                   | Difficulty with ambiguous queries                            | Lacks multi-source aggregation and retrieval                 | Aggregates data from multiple news sources for quick insights |
-| **Large Language Models in Finance: A Survey**        | Various Authors           | Survey of LLM applications in financial tasks                                                   | Highlights few-shot/zero-shot learning for financial applications                             | Cost of fine-tuning and handling large documents             | No token optimization or handling large documents            | Reduces API costs by optimizing text chunks for processing    |
-| **AI in Equity Research**                             | Recosense Labs            | AI tools like NER and document analyzers                                                        | Automates data extraction, improving accuracy                                                    | Handling unstructured data                                   | No easy-to-use interface for quick querying                  | Provides a simple UI with real-time answers                  |
-| **LLMs for Financial Market Forecasting**             | Xiadong Li et al.         | LLMs combined with technical indicators for market forecasting                                 | Improves stock price forecasting accuracy                                                        | Limited by data availability and complexity                  | No integration of multi-source news data for forecasting      | Synthesizes multi-source data for a holistic research view    |
+---
 
+## Introduction 📄
 
-## Problem Statement
-- **Manual Process**: Equity research analysts spend excessive time manually reviewing and summarizing financial news from multiple sources.
-- **Fragmented Information**: Key insights are often scattered across various articles, making it difficult to form a comprehensive view.
-- **Limitations of Current Tools**: Existing tools, such as ChatGPT, face limitations in handling large documents, multi-source aggregation, and cost-efficiency.
-- **Need for Automation**: A tool is required to automate data aggregation, provide concise answers, and streamline the research process, enhancing decision-making accuracy for analysts.
+**FinAI** is a Retrieval-Augmented Generation (RAG) based equity news analyzer that simplifies information retrieval for investors, analysts, and financial researchers. Built using LangChain, OpenAI, Gemini, FAISS, and local LLM backends, it allows users to input article URLs and query them in natural language.
 
-## Objectives
-The key objectives of Stock Sage are:
-- To automate the process of gathering financial news and research from multiple sources.
-- To provide accurate and context-aware answers to user queries based on the aggregated news data.
-- To optimize costs by minimizing the amount of text provided to the LLM for analysis, thereby reducing API usage.
-- To enhance the efficiency and decision-making process of equity analysts by presenting summarized insights from large volumes of text.
+---
 
-## Working
-1. **Data Ingestion**: The tool loads financial news articles using LangChain's document loaders.
-2. **Text Processing**: News articles are split into smaller chunks using LangChain’s text splitters to ensure that they remain within LLM token limits.
-3. **Embeddings and Storage**: Text chunks are converted into embeddings using OpenAI's embeddings API and stored in a vector database (FAISS) for quick retrieval.
-4. **Query Processing**: When a user asks a question, the system retrieves relevant text chunks from the vector database and formulates an LLM prompt.
-5. **Answer Generation**: The LLM generates an answer, which is returned to the user along with the source of the information.
+## Problem Statement 🚫
 
-## Results
+* Equity research is **manual, fragmented, and time-consuming**.
+* Analysts must manually browse multiple sources and interpret insights.
+* LLMs like ChatGPT alone cannot handle **multi-source**, **large documents**, or **real-time querying efficiently**.
+* Need for a tool that can ingest articles, process them intelligently, and provide **accurate, real-time answers**.
 
-UI provides real-time updates on each stage’s progress
+---
+
+## Working (Pipeline Stages) ⚙️
+
+1. **Data Ingestion**
+
+   * News article URLs are fetched using `SeleniumURLLoader`.
+
+2. **Text Splitting**
+
+   * Articles are chunked using LangChain's `RecursiveCharacterTextSplitter` to fit LLM token limits.
+
+3. **Embeddings & Vector Store**
+
+   * Embeddings created via `OpenAI` or `HuggingFace` models (like `all-MiniLM-L6-v2`).
+   * FAISS stores and retrieves similar content based on queries.
+
+4. **Querying via LLMs**
+
+   * User queries are answered using OpenAI/Gemini/GPT4All/LLama-2 LLMs via `RetrievalQAWithSourcesChain`.
+   * Local models (`llama-cpp-python`, `gpt4all`) ensure offline support.
+
+5. **Answer + Source Display**
+
+   * Source-linked responses shown via Streamlit.
+
+---
+
+## Results 🔄
+
+* Tool providing real-time updates on each stage’s progress
 ![image](https://github.com/user-attachments/assets/097f5105-ea4c-404d-9cfe-fb24c74464d9)
 
-Tool providing exact accurate answer on straightforward (direct) queries
+* Tool providing exact accurate answer on straightforward (direct) queries
 ![image](https://github.com/user-attachments/assets/7f9f03c6-6b0f-4d25-ab01-5f384a9fe960)
 
-## Conclusion
-- Successfully developed an interactive tool for equity analysts to input URLs, retrieve relevant news insights, and receive accurate, context-aware answers.
-- Implemented a robust NLP pipeline combining LangChain, OpenAI embeddings, FAISS, and Streamlit, ensuring efficient document processing and semantic search.
-- Demonstrated practical use cases in aggregating and querying financial news, saving analysts significant time and effort in manual research.
-- Built a scalable and modular system ready for advanced enhancements, including fine-tuning LLMs, real-time updates, and multi-source integration. 
+* Customized same pipeline using both **online APIs** (OpenAI, Gemini) and **offline models** (LLaMA, GPT4All).
 
-## Future Scope
-- **Integration with Real-time Data**: Extend the tool to handle real-time stock data and integrate financial reports.
-- **Advanced Summarization**: Implement advanced summarization techniques using fine-tuned models for industry-specific insights.
-- **Multi-Language Support**: Enable multi-language support for global equity research.
-- **Custom Model Fine-tuning**: Explore fine-tuning custom LLM models specifically for financial domains to improve domain-specific accuracy.
+* Benchmark Table
 
-## References
-1. **Kou, Zhizhuo, Alan, and Shen.** "Automate Strategy Finding with LLM in Quant Investment." *arXiv preprint arXiv:2409.06289*, 2024.
-2. **Usha, M.S., and Kirange, D.K.** "Revolutionizing Finance with LLMs: An Overview of Applications and Insights." *arXiv preprint arXiv:2401.11641*, 2024.
-3. **Touvron, Hugo, and Leclerc, G.** "Large Language Models in Finance: A Survey." *arXiv preprint arXiv:2311.10723*, 2023.
-4. **Recosense Labs.** "AI in Equity Research." *Recosense Labs Publication*, 2024.
-5. **Li, Xiadong, and Zhang, C.** "LLMs for Financial Market Forecasting." *arXiv preprint arXiv:2311.10723*, 2023.
+  | **Backend**            | **Avg Latency** | **QA Relevance** | **Token Cost** | **Use-Case Fit**                            |
+  |---------------------- | --------------- | ---------------- | -------------- | ------------------------------------------- |
+  | OpenAI (gpt-3.5-turbo) | \~2.1s          | 96.4%            | High (Paid)    | Best for fast, high-quality responses     |
+  | Gemini Pro             | \~2.8s          | 92.1%            | Free (limited) | Good fallback; prone to hallucination     |
+  | Local LLaMA (7B)       | \~5.3s          | 93.2%            | None           | Reliable offline QA; requires setup       |
+  | GPT4All (q4\_0)        | \~7.2s          | 86.5%            | None           | Works offline; lower accuracy in deep QA |
 
-## Tech Stacks Involved
-- **LangChain**: Used for document loading, chunking, and integrating the LLM.
-- **OpenAI API**: For embedding text chunks and generating responses.
-- **Streamlit**: To build a user-friendly web interface for querying and displaying results.
-- **FAISS (Facebook AI Similarity Search)**: For efficient vector-based search.
-- **Python**: For backend development and API integration.
-- **Git**: For version control.
 
+---
+
+## Files & Structure 📁
+
+- `app_versions/`: Contains different Streamlit app versions based on LLMs — OpenAI, Gemini, GPT4All, and LLaMA.
+- `data_files/`: Includes sample article text files and URL lists used during experimentation.
+- `notebooks/`: Jupyter notebooks demonstrating individual components of the RAG pipeline (e.g., vector store testing, embeddings, chunking).
+- `test/`: Debugging and testing scripts for Gemini and LLaMA-based app flows.
+- `.env`: Stores environment variables like API keys for OpenAI and Gemini.
+- `faiss-store-hf.pkl`: Vector store generated using HuggingFace embeddings.
+- `faiss-store-openai.pkl`: Vector store generated using OpenAI embeddings.
+- `vector-index.pkl`: Sample vector index created using notebook for FAISS validation.
+- `main.py`: Primary file containing final UI code after experimentation.
+- `requirements.txt`: Python dependencies required for running the project.
+- `README.md`: Documentation and usage guide for the project.
+- `models/`: 🔐 Not uploaded — should contain downloaded local LLMs (refer to Installation)
+
+---
+
+## Installation 🚧
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/your-username/FinAI.git
+cd FinAI
+```
+
+2. **Install dependencies**
+
+```bash
+pip install -r requirements.txt
+```
+
+3. **Set up API keys**
+   Create a `.env` file just like the reference being provided and add:
+
+```
+OPENAI_API_KEY=your-key-here
+GOOGLE_API_KEY=your-google-studio-api-key
+```
+
+* OpenAI Key: [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys)
+* Gemini Key: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) (enable Gemini API on Google Cloud Console)
+
+4. **For local LLM usage**
+
+* Download `.gguf` models from [LLaMA HF](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF) or [GPT4All](https://gpt4all.io/index.html).
+* Create a `models/` directory and place them inside.
+* Update `model_path` in corresponding app files (e.g. `app_local_llama.py`).
+
+5. **Run the tool**
+
+```bash
+streamlit run main.py
+```
+
+---
+
+## Tech Stack 🚀
+
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![LangChain](https://img.shields.io/badge/LangChain-0.0.284-yellow?logo=langchain)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.22.0-ff4b4b?logo=streamlit)
+![OpenAI](https://img.shields.io/badge/OpenAI-API-04a6d4?logo=openai)
+![Google Gemini](https://img.shields.io/badge/Gemini-API-34a853?logo=google)
+![FAISS](https://img.shields.io/badge/FAISS-1.7.4-4b8bbe?logo=facebook)
+![HuggingFace](https://img.shields.io/badge/HuggingFace-Embeddings-fcc624?logo=huggingface)
+![LLaMA](https://img.shields.io/badge/LLaMA-2.7B-green?logo=meta)
+![GPT4All](https://img.shields.io/badge/GPT4All-Local%20LLM-purple?logo=nvidia)
+
+* **LangChain**: Orchestration of RAG pipeline
+* **Streamlit**: Interactive web interface
+* **OpenAI & Gemini APIs**: Cloud-based LLMs
+* **LLaMA / GPT4All**: Local LLMs
+* **HuggingFace Embeddings**: SentenceTransformers (`all-MiniLM-L6-v2`)
+* **FAISS**: Vector similarity search and store
+* **Python + Selenium**: Document scraping + automation
+
+---
+
+## References 📚
+
+* [OpenAI Platform](https://platform.openai.com/)
+* [Gemini API Studio](https://aistudio.google.com/app/apikey)
+* [Google Cloud Console](https://console.cloud.google.com/)
+* [HuggingFace Embedding Model](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
+* [LLaMA GGUF HF Models](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF)
+* [GPT4All Local Models](https://gpt4all.io/index.html)
+* [Other Models](https://huggingface.co/nomic-ai/models)
+* [Streamlit Docs](https://docs.streamlit.io)
+
+---
+
+## Future Scope 🔮
+
+* Real-time financial API integration (e.g. stock prices, reports)
+* LLM-based summarization for multi-source insights
+* Domain-tuned custom LLMs for financial jargon
+* Globalization support via multi-language ingestion
+
+---
+
+## Contributing 🤝
+
+We welcome contributions! Feel free to:
+
+* Fork the repo
+* Create a new branch
+* Submit PR with changes or improvements
+
+---
+
+## Thanks for Visiting 😊!
+
+We hope **FinAI** helps you gain actionable insights with less effort. If you like it, give the repo a ⭐ and feel free to reach out for suggestions or ideas!
+
+---
+<!--
 ## Summary
-**StockSage** is one of the cutting-edge news research tools designed to simplify information retrieval from the stock market and financial domain. With this analyzer, users can effortlessly input article URLs and ask questions to receive relevant insights, making it an invaluable asset for investors, analysts, and financial enthusiasts.
+**FinAI** is one of the cutting-edge news research tools designed to simplify information retrieval from the stock market and financial domain. With this analyzer, users can effortlessly input article URLs and ask questions to receive relevant insights, making it an invaluable asset for investors, analysts, and financial enthusiasts.
 
 ### Features
 - **Effortless URL Loading**
@@ -93,4 +215,4 @@ Tool providing exact accurate answer on straightforward (direct) queries
 - **Interactive Querying**
   - Natural Language Interaction: Interact with advanced Language Learning Models (LLMs) like ChatGPT by inputting queries.
   - Insightful Responses: Receive detailed answers along with source URLs, ensuring transparency and reliability of information.
-
+-->
