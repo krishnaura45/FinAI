@@ -2,59 +2,70 @@ import os
 import streamlit as st
 import pickle
 import time
-from langchain import OpenAI
+import google.generativeai as genai
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import UnstructuredURLLoader
-from langchain.embeddings import OpenAIEmbeddings
-# from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.document_loaders import SeleniumURLLoader
 from langchain.vectorstores import FAISS
-
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.llms.base import LLM
 from dotenv import load_dotenv
-load_dotenv()  # take environment variables from .env (especially openai api key)
+
+load_dotenv()  # Load environment variables
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=GEMINI_API_KEY)
+
+class GeminiLLM(LLM):
+    def _call(self, prompt, stop=None, run_manager=None, **kwargs):
+        model = genai.GenerativeModel("gemini-1.5-flash")  # or "gemini-2.5-pro"
+        response = model.generate_content(prompt)
+        return response.text
+
+    @property
+    def _llm_type(self) -> str:
+        return "google_gemini"
 
 st.title("News Research Tool 📈")
 st.sidebar.title("News Article URLs")
 
 urls = []
 for i in range(3):
-    url= st.sidebar.text_input(f"URL {i+1}")
+    url = st.sidebar.text_input(f"URL {i+1}")
     urls.append(url)
 
 process_url_clicked = st.sidebar.button("Process URLs")
-file_path = "faiss-store-openai.pkl"
+file_path = "faiss-store-hf.pkl"
 
 main_placeholder = st.empty()
-llm = OpenAI(temperature=0.9, max_tokens=500)
+llm = GeminiLLM()
 
 if process_url_clicked:
-    # load data
-    loader = UnstructuredURLLoader(urls=urls)
+    loader = SeleniumURLLoader(urls=urls)
     main_placeholder.text("Data Loading >>> Started >>> ✅✅✅")
     data = loader.load()
-    print(len(data))
-    # split data
+    print(f"Loaded {len(data)} documents")
+
     text_splitter = RecursiveCharacterTextSplitter(
-        separators=['\n\n', '\n', '.', ','],
-        chunk_size=1000
+        chunk_size=1000,
+        separators=['\n\n', '\n', '.', ' ']
     )
+
     main_placeholder.text("Text Splitter >>> Started >>> ✅✅✅")
     docs = text_splitter.split_documents(data)
-    
+    print(f"Text splitting done")
+
     if os.path.exists(file_path):
         with open(file_path, "rb") as f:
-            vectorstore_openai = pickle.load(f)
+            vectorstore = pickle.load(f)
     else:
-        # create embeddings and save it to FAISS index
-        embeddings = OpenAIEmbeddings()
-        # Example with a lightweight model
-        # embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-        
-        # Process and save the Faiss index into a pickle file
-        vectorstore_openai = FAISS.from_documents(docs, embeddings)
+        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        vectorstore = FAISS.from_documents(docs, embeddings)
         with open(file_path, "wb") as f:
-            pickle.dump(vectorstore_openai, f)
+            pickle.dump(vectorstore, f)
+
     main_placeholder.text("Embedding Vector Creation >>> ✅✅✅")
+    print(f"Embeddings creation completed")
     time.sleep(2)
 
 query = main_placeholder.text_input("Question: ")
@@ -64,34 +75,12 @@ if query:
             vectorstore = pickle.load(f)
             chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=vectorstore.as_retriever())
             result = chain({"question": query}, return_only_outputs=True)
-            # result will be a dictionary of this format --> {"answer": "", "sources": [] }
             st.header("Answer")
             st.write(result["answer"])
 
-            # Display sources, if available
             sources = result.get("sources", "")
             if sources:
                 st.subheader("Sources:")
-                sources_list = sources.split("\n")  # Split the sources by newline
+                sources_list = sources.split("\n")
                 for source in sources_list:
                     st.write(source)
-
-# --------------------------------------------------
-
-
-# from langchain.document_loaders import TextLoader
-# import requests
-
-# texts = []
-# for url in urls:
-#     try:
-#         response = requests.get(url)
-#         response.raise_for_status()
-#         texts.append(response.text)  # Fetch raw HTML
-#     except Exception as e:
-#         print(f"Error fetching {url}: {e}")
-
-# # Load documents from fetched raw HTML
-# loader = TextLoader(documents=texts)
-# documents = loader.load()
-# print(f"Loaded {len(documents)} documents")
