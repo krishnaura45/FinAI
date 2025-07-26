@@ -1,4 +1,4 @@
-<h1 align=center> StockSage: AI Driven Equity Research Tool</h1> 
+<h1 align=center> FinAI: Equity News Research Tool</h1> 
 
 ![image](https://github.com/user-attachments/assets/5c066a63-4df4-4bbb-8f3c-852b7aeed32a)
 
