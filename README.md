@@ -6,17 +6,17 @@
 
 ## Table of Contents
 
-* [Introduction](#introduction)
-* [Problem Statement](#problem-statement)
-* [Working (Pipeline Stages)](#working-pipeline-stages)
-* [Results](#results)
-* [Files & Structure](#files--structure)
-* [Installation](#installation)
-* [Tech Stack](#tech-stack)
-* [References](#references)
-* [Future Scope](#future-scope)
-* [Contributing](#contributing)
-* [Thanks for Visiting!](#thanks-for-visiting)
+* [Introduction](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#introduction-)
+* [Problem Statement](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#problem-statement-)
+* [Working (Pipeline Stages)](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#working-pipeline-stages-)
+* [Results](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#results-)
+* [Files & Structure](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#files--structure-)
+* [Installation](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#installation-)
+* [Tech Stack](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#tech-stack-)
+* [References](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#references-)
+* [Future Scope](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#future-scope-)
+* [Contributing](https://github.com/krishnaura45/FinAI?tab=readme-ov-file#contributing-)
+<!--* [Thanks for Visiting!](#thanks-for-visiting)-->
 
 ---
 
@@ -170,7 +170,7 @@ streamlit run main.py
 * [HuggingFace Embedding Model](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 * [LLaMA GGUF HF Models](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF)
 * [GPT4All Local Models](https://gpt4all.io/index.html)
-* [Other Models](https://huggingface.co/nomic-ai/models)
+* [Other HuggingFace Models](https://huggingface.co/nomic-ai/models)
 * [Streamlit Docs](https://docs.streamlit.io)
 
 ---
